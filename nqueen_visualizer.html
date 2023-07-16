@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>n-Queens Visualizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 50px); 
+      grid-template-rows: repeat(8, 50px); 
+      gap: 1px;
+      margin: 20px auto;
+      border: 1px solid #000;
+    }
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .cell.queen {
+      background-color: #FF5722;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>n-Queens Visualizer</h1>
+  <div class="board" id="board"></div>
+  <script>
+    let boardSize = 8; 
+    let queens = [];
+
+    function initializeBoard() {
+      const board = document.getElementById("board");
+      for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.setAttribute("data-row", i);
+          cell.setAttribute("data-col", j);
+          board.appendChild(cell);
+        }
+      }
+      board.addEventListener("click", placeQueen);
+    }
+
+    function placeQueen(event) {
+      const cell = event.target;
+      const row = parseInt(cell.getAttribute("data-row"));
+      const col = parseInt(cell.getAttribute("data-col"));
+
+      if (queens.some((queen) => queen.row === row || queen.col === col || queen.row - queen.col === row - col || queen.row + queen.col === row + col)) {
+        return;
+      }
+
+      queens.push({ row, col });
+      cell.classList.add("queen");
+    }
+
+    function clearBoard() {
+      const board = document.getElementById("board");
+      queens = [];
+      const cells = board.querySelectorAll(".cell");
+      cells.forEach((cell) => cell.classList.remove("queen"));
+    }
+
+    function visualizeQueens() {
+      clearBoard();
+      const board = document.getElementById("board");
+      queens.forEach((queen) => {
+        const cell = board.querySelector(`[data-row="${queen.row}"][data-col="${queen.col}"]`);
+        cell.classList.add("queen");
+      });
+    }
+
+    initializeBoard();
+  </script>
+</body>
+</html>
